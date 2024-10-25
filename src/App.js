@@ -1,23 +1,26 @@
-import logo from './logo.svg';
+import { API } from './api/api';
+import { useEffect, useReducer } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { reducer, initState } from './store/store';
+import Home from './pages/Home';
 import './App.css';
+import Header from './components/Header/Header';
 
 function App() {
+
+  const [state, dispatch] = useReducer(reducer, initState)
+  
+  useEffect(() => {
+   API.getAll(dispatch)
+  }, [])
+
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header dispatch={dispatch}/>
+      <Routes>
+        <Route path='/' element={<Home countries={state.countries}/> }/>
+      </Routes>
     </div>
   );
 }
